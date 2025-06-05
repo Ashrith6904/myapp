@@ -1,0 +1,25 @@
+---
+- name: Deploy Maven Jar
+  hosts: webserver
+  become: yes
+  tasks:
+
+    - name: Ensure deployment directory exists
+      file:
+        path: /opt/myapp
+        state: directory
+        mode: '0755'
+
+    - name: Copy .jar file from Jenkins workspace to remote server
+      copy:
+        src: /var/lib/jenkins/workspace/maven-ci-pipeline/target/myapp-1.0-SNAPSHOT.jar
+        dest: /opt/myapp/myapp.jar
+        mode: '0755'
+      delegate_to: localhost
+
+#    - name: Restart application service
+#      systemd:
+#        name: myapp
+#        state: restarted
+#        enabled: yes
+
